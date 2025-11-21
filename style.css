@@ -62,10 +62,9 @@ h4 {
     background: var(--gradient-1);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    display: inline-block;
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
+    display: block;
+    width: fit-content;
+    margin: 0 auto 3rem auto;
 }
 
 .section-subtitle {
@@ -339,6 +338,7 @@ h4 {
     padding: 3rem;
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.05);
+    text-align: center;
 }
 
 .about-text p {
@@ -354,6 +354,8 @@ h4 {
     display: flex;
     gap: 4rem;
     margin-top: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .stat-item {

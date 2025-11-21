@@ -1,12 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Dynamic Year
-    document.getElementById('year').textContent = new Date().getFullYear();
+    const yearSpan = document.getElementById('year');
+    if (yearSpan) {
+        yearSpan.textContent = new Date().getFullYear();
+    }
 
     // Mobile Menu Toggle
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
-    
-    if (hamburger) {
+
+    if (hamburger && navLinks) {
         hamburger.addEventListener('click', () => {
             navLinks.classList.toggle('active');
             hamburger.classList.toggle('toggle');
@@ -17,16 +20,16 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
-            
+
             // Close mobile menu if open
-            if (navLinks.classList.contains('active')) {
+            if (navLinks && navLinks.classList.contains('active')) {
                 navLinks.classList.remove('active');
-                hamburger.classList.remove('toggle');
+                if (hamburger) hamburger.classList.remove('toggle');
             }
 
             const targetId = this.getAttribute('href');
             if (targetId === '#') return;
-            
+
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
                 targetElement.scrollIntoView({
@@ -38,15 +41,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Navbar Scroll Effect
     const navbar = document.querySelector('.navbar');
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            navbar.style.background = 'rgba(10, 10, 10, 0.95)';
-            navbar.style.boxShadow = '0 2px 10px rgba(0,0,0,0.3)';
-        } else {
-            navbar.style.background = 'rgba(10, 10, 10, 0.8)';
-            navbar.style.boxShadow = 'none';
-        }
-    });
+    if (navbar) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(10, 10, 10, 0.95)';
+                navbar.style.boxShadow = '0 2px 10px rgba(0,0,0,0.3)';
+            } else {
+                navbar.style.background = 'rgba(10, 10, 10, 0.8)';
+                navbar.style.boxShadow = 'none';
+            }
+        });
+    }
 
     // Intersection Observer for Fade-in Animations
     const observerOptions = {
@@ -77,6 +82,56 @@ document.addEventListener('DOMContentLoaded', () => {
             el.style.transform = 'translateY(0)';
         });
     });
+
+    // Contact Form Submission Logic
+    const contactForm = document.getElementById('contactForm');
+    const btnWhatsapp = document.getElementById('btnWhatsapp');
+    const btnEmail = document.getElementById('btnEmail');
+
+    if (contactForm) {
+        // Helper to validate and get values
+        const validateAndGetValues = () => {
+            if (!contactForm.checkValidity()) {
+                contactForm.reportValidity();
+                return null;
+            }
+            return {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                message: document.getElementById('message').value
+            };
+        };
+
+        // WhatsApp Submission
+        if (btnWhatsapp) {
+            btnWhatsapp.addEventListener('click', function () {
+                const values = validateAndGetValues();
+                if (!values) return;
+
+                const { name, email, message } = values;
+                const whatsappNumber = "94767267559";
+                const text = `Name: ${name}%0AEmail: ${email}%0AMessage: ${message}`;
+                const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${text}`;
+
+                window.open(whatsappUrl, '_blank');
+            });
+        }
+
+        // Email Submission
+        if (btnEmail) {
+            btnEmail.addEventListener('click', function () {
+                const values = validateAndGetValues();
+                if (!values) return;
+
+                const { name, email, message } = values;
+                const subject = `Portfolio Contact from ${name}`;
+                const body = `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
+                const mailtoUrl = `mailto:gnanarubanthirumal14@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+                window.location.href = mailtoUrl;
+            });
+        }
+    }
 });
 
 // Add CSS for mobile menu active state dynamically
